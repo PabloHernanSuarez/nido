@@ -1,0 +1,20 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}Restablecer contraseña · Nido{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4">
+            {% for flash_error in app.flashes('reset_password_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
+            <h1 class="h3 mb-2">Restablecer contraseña</h1>
+            <p class="small text-secondary">Ingresá tu mail y te mandamos un link para elegir una contraseña nueva.</p>
+            {{ form_start(requestForm) }}
+                {{ form_row(requestForm.email, {label: 'Mail'}) }}
+                <button class="btn btn-nido w-100" type="submit">Mandarme el link</button>
+            {{ form_end(requestForm) }}
+            <div class="text-center mt-3"><a href="{{ path('app_login') }}" class="small">Volver a ingresar</a></div>
+        </div>
+    </div>
+{% endblock %}

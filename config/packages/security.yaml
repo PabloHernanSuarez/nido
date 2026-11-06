@@ -1,0 +1,81 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Usuario
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js|build)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                # Después de ingresar se va siempre al inicio, nunca a la URL
+                # que se había pedido sin sesión: una acción que entra por GET
+                # se ejecutaría sola.
+                default_target_path: app_homepage
+                always_use_default_target_path: true
+            login_throttling:
+                limiter: App\Security\LoginRateLimiter
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_login
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            switch_user: { role: ROLE_SUPER_ADMIN }
+
+    # Los perfiles (App\Security\RoleHelper) agrupan permisos finos: las
+    # pantallas piden el permiso, nunca el perfil.
+    role_hierarchy:
+        ROLE_DIRECTORA:
+            - ROLE_USUARIO_VER
+            - ROLE_USUARIO_EDITAR
+        ROLE_SUPER_ADMIN:
+            - ROLE_JARDIN_VER
+            - ROLE_JARDIN_EDITAR
+            - ROLE_USUARIO_VER
+            - ROLE_USUARIO_EDITAR
+            - ROLE_AUDITORIA_VER
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: '^/login', roles: PUBLIC_ACCESS }
+        - { path: '^/reset-password', roles: PUBLIC_ACCESS }
+        - { path: '^/logout', roles: ROLE_USER }
+        - { path: ^/usuario/cambiar-password, roles: ROLE_USER }
+        - { path: ^/usuario/new, roles: ROLE_USUARIO_EDITAR }
+        - { path: ^/usuario/\d+/edit, roles: ROLE_USUARIO_EDITAR }
+        - { path: ^/usuario/\d+/habilitar, roles: ROLE_USUARIO_EDITAR }
+        - { path: ^/usuario, roles: ROLE_USUARIO_VER }
+        - { path: ^/jardin/new, roles: ROLE_JARDIN_EDITAR }
+        - { path: ^/jardin/\d+/edit, roles: ROLE_JARDIN_EDITAR }
+        - { path: ^/jardin, roles: ROLE_JARDIN_VER }
+        - { path: ^/audit, roles: ROLE_AUDITORIA_VER }
+        - { path: '^/.+', roles: ROLE_SUPER_ADMIN }
+        - { path: ^/, roles: ROLE_USER }
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

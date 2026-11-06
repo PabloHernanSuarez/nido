@@ -1,0 +1,45 @@
+@import 'tema';
+
+// Pantallas sin sesión: login y restablecer contraseña.
+.nido-auth {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem;
+
+    .nido-auth-marca {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        font-family: $headings-font-family;
+        font-size: 2.2rem;
+        font-weight: 700;
+
+        img {
+            width: 2.75rem;
+            height: 2.75rem;
+        }
+    }
+
+    .nido-auth-titulo {
+        font-size: 2.6rem;
+        line-height: 1.05;
+    }
+}
+
+// "Soy familia / Soy del equipo".
+.nido-selector {
+    display: inline-flex;
+    background: $nido-crema;
+    border-radius: 50rem;
+    padding: .25rem;
+
+    .btn {
+        border: 0;
+        color: $nido-petroleo;
+
+        &.active {
+            background: $nido-petroleo;
+            color: #fff;
+        }
+    }
+}

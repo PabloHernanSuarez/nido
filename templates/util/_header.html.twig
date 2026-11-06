@@ -1,0 +1,44 @@
+{# Encabezado de la maqueta: Nido | el jardín, el usuario y Salir, y debajo la
+   navegación en píldoras según los permisos. #}
+<header class="nido-header">
+    <div class="nido-contenido container px-3 py-3">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <a class="nido-marca" href="{{ path('app_homepage') }}">
+                <img src="{{ asset('images/nido.svg') }}" alt="">Nido
+            </a>
+            {% if jardin_actual %}
+                <span class="nido-jardin">
+                    {% if jardin_actual.logo %}<img src="{{ asset('uploads/jardines/' ~ jardin_actual.logo) }}" alt="">{% endif %}
+                    {{ jardin_actual.nombre }}
+                </span>
+            {% endif %}
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <span class="nido-usuario">{{ app.user.nombre }} · {{ app.user.perfil|perfil }}</span>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Cuenta</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ path('app_usuario_cambiar_password') }}">Cambiar contraseña</a></li>
+                        {% if is_granted('IS_IMPERSONATOR') %}
+                            <li><a class="dropdown-item" href="{{ impersonation_exit_path(path('app_homepage')) }}">Volver a mi usuario</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Salir</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% set ruta = app.request.attributes.get('_route') ?? '' %}
+        <nav class="nav nido-nav mt-3">
+            <a class="nav-link{{ ruta == 'app_homepage' ? ' active' }}" href="{{ path('app_homepage') }}">Inicio</a>
+            {% if is_granted('ROLE_USUARIO_VER') %}
+                <a class="nav-link{{ ruta starts with 'app_usuario' and ruta != 'app_usuario_cambiar_password' ? ' active' }}" href="{{ path('app_usuario_index') }}">Usuarios</a>
+            {% endif %}
+            {% if is_granted('ROLE_JARDIN_VER') %}
+                <a class="nav-link{{ ruta starts with 'app_jardin' ? ' active' }}" href="{{ path('app_jardin_index') }}">Jardines</a>
+            {% endif %}
+            {% if is_granted('ROLE_AUDITORIA_VER') %}
+                <a class="nav-link" href="{{ path('dh_auditor_list_audits') }}">Auditoría</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>

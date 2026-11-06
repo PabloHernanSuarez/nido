@@ -1,0 +1,44 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}Ingresar · Nido{% endblock %}
+
+{% block body %}
+    <h1 class="nido-auth-titulo mb-3">Bienvenidos a Nido</h1>
+    <p class="mb-4">Entrá para ver los avisos, las fotos y todas las novedades de la sala.</p>
+
+    <div class="card">
+        <div class="card-body p-4">
+            <h2 class="h3 mb-3">Ingresar</h2>
+
+            <div class="nido-selector mb-3" role="group" aria-label="Cómo entrás">
+                <button type="button" class="btn active" data-perfil-login="familia">Soy familia</button>
+                <button type="button" class="btn" data-perfil-login="equipo">Soy del equipo</button>
+            </div>
+            <p class="small text-secondary" data-ayuda-login="familia">Entrá con el mail que dejaste en el jardín.</p>
+            <p class="small text-secondary d-none" data-ayuda-login="equipo">Entrá con el mail de tu usuario del jardín.</p>
+
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <form method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Mail</label>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" placeholder="nombre@mail.com" autocomplete="email" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <div class="input-group password-wrapper">
+                        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                        <button type="button" class="btn btn-outline-secondary password-toggle" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <button class="btn btn-nido btn-lg w-100" type="submit">Ingresar</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="{{ path('app_forgot_password_request') }}" class="small">Me olvidé la contraseña</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

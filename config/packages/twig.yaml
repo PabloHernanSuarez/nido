@@ -1,0 +1,10 @@
+twig:
+    file_name_pattern: '*.twig'
+    form_themes: ['bootstrap_5_layout.html.twig']
+    globals:
+        email_soporte: '%app.email_soporte%'
+        ambiente: '%env(default::APP_AMBIENTE)%'
+
+when@test:
+    twig:
+        strict_variables: true

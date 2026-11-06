@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jardines · Nido{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-wrap align-items-end gap-3 mb-3">
+        <div>
+            <h1 class="mb-1">Jardines</h1>
+            <p class="nido-subtitulo mb-0">La información de cada jardín nunca se mezcla con la de otro.</p>
+        </div>
+        {% if is_granted('ROLE_JARDIN_EDITAR') %}
+            <a href="{{ path('app_jardin_new') }}" class="btn btn-nido ms-auto"><i class="bi bi-plus-lg"></i> Nuevo jardín</a>
+        {% endif %}
+    </div>
+
+    <div class="row g-3">
+        {% for jardin in jardines %}
+            <div class="col-md-6">
+                <div class="card h-100" style="border-top: 6px solid {{ jardin.color }}">
+                    <div class="card-body d-flex gap-3">
+                        {% if jardin.logo %}
+                            <img src="{{ asset('uploads/jardines/' ~ jardin.logo) }}" alt="" style="width: 56px; height: 56px; object-fit: contain">
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <h2 class="h5 mb-1">{{ jardin.nombre }}</h2>
+                            <p class="small text-secondary mb-2">
+                                {{ jardin.direccion ?? 'Sin dirección' }}{% if jardin.telefono %} · {{ jardin.telefono }}{% endif %}
+                            </p>
+                            <span class="nido-estado {{ jardin.activo ? 'nido-estado-ok' : 'nido-estado-neutro' }}">{{ jardin.activo ? 'Activo' : 'Inactivo' }}</span>
+                            <span class="nido-estado nido-estado-neutro">{{ jardin.usuarios|length }} usuarios</span>
+                        </div>
+                        {% if is_granted('ROLE_JARDIN_EDITAR') %}
+                            <a href="{{ path('app_jardin_edit', {id: jardin.id}) }}" class="btn btn-sm btn-outline-primary align-self-start">Editar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12"><div class="card"><div class="card-body text-center text-secondary py-4">Todavía no hay jardines.</div></div></div>
+        {% endfor %}
+    </div>
+{% endblock %}

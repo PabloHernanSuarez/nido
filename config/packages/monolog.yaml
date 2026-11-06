@@ -1,0 +1,93 @@
+monolog:
+    channels:
+        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+
+when@dev:
+    monolog:
+        handlers:
+            main:
+                type:         fingers_crossed
+                action_level: error
+                handler:      grouped
+                channels:     ['!mailer']
+            grouped:
+                type:    group
+                members: [streamed, deduplicated]
+            streamed:
+                type:  stream
+                path:  '%kernel.logs_dir%/%kernel.environment%.log'
+                level: debug
+            deduplicated:
+                type:    deduplication
+                handler: symfony_mailer
+            symfony_mailer:
+                type:         symfony_mailer
+                from_email:   'Error Nido <soporte@nido.com.ar>'
+                to_email:     'ing.pablosuarez@gmail.com'
+                subject:      'An Error Occurred! %%message%%'
+                level:        debug
+                formatter:    monolog.formatter.html
+                content_type: text/html
+
+when@test:
+    monolog:
+        handlers:
+            main:
+                type:         fingers_crossed
+                action_level: error
+                handler:      grouped
+                channels:     ['!mailer']
+            grouped:
+                type:    group
+                members: [streamed, deduplicated]
+            streamed:
+                type:  stream
+                path:  '%kernel.logs_dir%/%kernel.environment%.log'
+                level: debug
+            deduplicated:
+                type:    deduplication
+                handler: symfony_mailer
+            symfony_mailer:
+                type:         symfony_mailer
+                from_email:   'Error Nido <soporte@nido.com.ar>'
+                to_email:     'ing.pablosuarez@gmail.com'
+                subject:      'An Error Occurred! %%message%%'
+                level:        debug
+                formatter:    monolog.formatter.html
+                content_type: text/html
+
+when@prod:
+    monolog:
+        handlers:
+            main:
+                type:         fingers_crossed
+                action_level: error
+                handler:      streamed
+                channels:     ['!mailer']
+            # Only errors of logged-in users, login/reset password pages and cron jobs are emailed (not manual console commands),
+            # so scanner probes (anonymous 404s) don't flood the inbox
+            email:
+                type:                fingers_crossed
+                activation_strategy: App\Monolog\ErrorEmailActivationStrategy
+                handler:             deduplicated
+                channels:            ['!mailer']
+            streamed:
+                type:  stream
+                path:  '%kernel.logs_dir%/%kernel.environment%.log'
+                level: debug
+            deduplicated:
+                type:    deduplication
+                handler: symfony_mailer
+            symfony_mailer:
+                type:         symfony_mailer
+                from_email:   'Error Nido <soporte@nido.com.ar>'
+                to_email:     'ing.pablosuarez@gmail.com'
+                subject:      'An Error Occurred! %%message%%'
+                level:        debug
+                formatter:    monolog.formatter.html
+                content_type: text/html
+            mailer_stream:
+                type:     stream
+                path:     '%kernel.logs_dir%/%kernel.environment%.log'
+                level:    error
+                channels: ['mailer']

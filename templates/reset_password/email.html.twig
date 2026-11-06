@@ -1,0 +1,7 @@
+<div style="font-family: Arial, sans-serif; color: #1f4d5a;">
+    <h1 style="font-size: 22px;">Restablecer tu contraseña de Nido</h1>
+    <p>Para elegir una contraseña nueva, entrá a este link:</p>
+    <p><a href="{{ url('app_reset_password', {token: resetToken.token}) }}" style="color: #b2472e;">{{ url('app_reset_password', {token: resetToken.token}) }}</a></p>
+    <p>El link vence en {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+    <p>Si no lo pediste, ignorá este mail.</p>
+</div>

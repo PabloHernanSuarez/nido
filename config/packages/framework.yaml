@@ -1,0 +1,36 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    secret: '%env(APP_SECRET)%'
+
+    # Note that the session will be started ONLY if you read or write from it.
+    session:
+        # El cierre por inactividad lo controla SesionVencidaSubscriber
+        # (app.sesion.minutos_inactividad). Las sesiones se guardan en el
+        # proyecto y no en la carpeta de PHP del sistema porque ahí Ubuntu las
+        # borra a los 24 minutos sin uso (phpsessionclean, con el valor del
+        # php.ini), antes de que actúe ese control. Acá las limpia PHP, y
+        # gc_maxlifetime tiene que ser mayor que los minutos de inactividad.
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        gc_maxlifetime: 14400
+        gc_probability: 1
+        gc_divisor: 100
+
+    #esi: true
+    #fragments: true
+
+    rate_limiter:
+        by_ip:
+            policy: sliding_window
+            limit: 20
+            interval: '1 minute'
+        by_username:
+            policy: sliding_window
+            limit: 5
+            interval: '5 minutes'
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file

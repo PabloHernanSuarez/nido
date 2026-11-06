@@ -1,0 +1,10 @@
+{% set iconos = {success: 'bi-check-circle-fill', danger: 'bi-exclamation-octagon-fill', warning: 'bi-exclamation-triangle-fill', info: 'bi-info-circle-fill'} %}
+{% for tipo, mensajes in app.flashes %}
+    {% for mensaje in mensajes %}
+        <div class="alert alert-{{ tipo }} alert-dismissible fade show d-flex gap-2" role="alert">
+            <i class="bi {{ iconos[tipo] ?? 'bi-info-circle-fill' }} text-{{ tipo }}"></i>
+            <div>{{ mensaje }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    {% endfor %}
+{% endfor %}

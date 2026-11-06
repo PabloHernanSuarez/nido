@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Nido{% endblock %}</title>
+        <link rel="icon" href="{{ asset('images/nido.svg') }}" type="image/svg+xml">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    {% set jardin_actual = app.user ? app.user.jardin : null %}
+    <body{% if jardin_actual %} style="--nido-jardin: {{ jardin_actual.color }}"{% endif %}>
+        {% block layout %}
+            {% include 'util/_header.html.twig' %}
+            <main class="nido-contenido container px-3 py-4">
+                {% include 'util/_flashes.html.twig' %}
+                {% block body %}{% endblock %}
+            </main>
+            <footer class="nido-pie text-center pb-4">
+                <img src="{{ asset('images/nido.svg') }}" alt="" width="14" height="14"> Nido
+                {% if ambiente %} · {{ ambiente }}{% endif %}
+            </footer>
+        {% endblock %}
+    </body>
+</html>

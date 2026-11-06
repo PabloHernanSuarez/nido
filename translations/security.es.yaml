@@ -1,0 +1,8 @@
+'This account is disabled.': 'Esta cuenta está deshabilitada.'
+'Invalid credentials.': 'Credenciales inválidas.'
+'An authentication exception occurred.': 'Ocurrió un error de autenticación.'
+'Authentication credentials could not be found.': 'No se encontraron las credenciales de autenticación.'
+'Authentication request could not be processed due to a system problem.': 'No se pudo procesar la solicitud de autenticación debido a un problema del sistema.'
+'Too many failed login attempts, please try again later.': 'Demasiados intentos fallidos. Intente nuevamente más tarde.'
+'Too many failed login attempts, please try again in %minutes% minute.': 'Demasiados intentos fallidos. Intente nuevamente más tarde.'
+'Too many failed login attempts, please try again in %minutes% minutes.': 'Demasiados intentos fallidos. Intente nuevamente más tarde.'

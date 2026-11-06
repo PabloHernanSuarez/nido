@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nido">
+  <circle cx="25" cy="17" r="7" fill="#f2c04d"/>
+  <circle cx="39" cy="17" r="7" fill="#b2472e"/>
+  <path d="M8 28h48c0 13-10.7 22-24 22S8 41 8 28z" fill="none" stroke="#1f4d5a" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M16 37c10 4 22 4 32 0" fill="none" stroke="#1f4d5a" stroke-width="4" stroke-linecap="round"/>
+</svg>

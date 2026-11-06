@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titulo }} · Nido{% endblock %}
+
+{% block body %}
+    <div class="mx-auto" style="max-width: 560px">
+        <h1 class="mb-3">{{ titulo }}</h1>
+        <div class="card">
+            <div class="card-body p-4">
+                {{ form_start(form) }}
+                    {{ form_row(form.nombre) }}
+                    <div class="row">
+                        <div class="col-sm-7">{{ form_row(form.direccion) }}</div>
+                        <div class="col-sm-5">{{ form_row(form.telefono) }}</div>
+                    </div>
+                    {{ form_row(form.color, {attr: {class: 'form-control-color'}}) }}
+                    {% if jardin.logo %}
+                        <div class="mb-2"><img src="{{ asset('uploads/jardines/' ~ jardin.logo) }}" alt="Logo actual" style="max-height: 64px"></div>
+                    {% endif %}
+                    {{ form_row(form.archivoLogo) }}
+                    {{ form_rest(form) }}
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn btn-nido">Guardar</button>
+                        <a href="{{ path('app_jardin_index') }}" class="btn btn-outline-primary">Cancelar</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuarios · Nido{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-wrap align-items-end gap-3 mb-3">
+        <div>
+            <h1 class="mb-1">Usuarios</h1>
+            <p class="nido-subtitulo mb-0">El equipo del jardín y las familias que entran a Nido.</p>
+        </div>
+        {% if is_granted('ROLE_USUARIO_EDITAR') %}
+            <a href="{{ path('app_usuario_new') }}" class="btn btn-nido ms-auto"><i class="bi bi-plus-lg"></i> Nuevo usuario</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="get" class="mb-3" role="search">
+                <div class="input-group">
+                    <input type="search" name="q" value="{{ busqueda }}" class="form-control" placeholder="Buscar por nombre, apellido o mail">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table align-middle mb-0 table-responsive-stack">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Mail</th>
+                            <th>Perfil</th>
+                            {% if not app.user.jardin %}<th>Jardín</th>{% endif %}
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in pagination %}
+                            <tr>
+                                <td class="fw-bold" data-label="Nombre">{{ usuario.apellido }}, {{ usuario.nombre }}</td>
+                                <td data-label="Mail">{{ usuario.email }}</td>
+                                <td data-label="Perfil">{{ usuario.perfil|perfil }}</td>
+                                {% if not app.user.jardin %}<td data-label="Jardín">{{ usuario.jardin ?? '—' }}</td>{% endif %}
+                                <td data-label="Estado">
+                                    <span>
+                                    {% if usuario.active %}
+                                        <span class="nido-estado nido-estado-ok">Habilitado</span>
+                                    {% else %}
+                                        <span class="nido-estado nido-estado-neutro">Deshabilitado</span>
+                                    {% endif %}
+                                    {% if usuario.passwordChangedAt is null %}
+                                        <span class="nido-estado nido-estado-pendiente">Nunca entró</span>
+                                    {% endif %}
+                                    </span>
+                                </td>
+                                <td class="text-end text-nowrap">
+                                    {% if is_granted('ROLE_USUARIO_EDITAR') %}
+                                        <a href="{{ path('app_usuario_edit', {id: usuario.id}) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                                        {% if usuario != app.user %}
+                                            <form method="post" action="{{ path('app_usuario_habilitar', {id: usuario.id}) }}" class="d-inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('habilitar' ~ usuario.id) }}">
+                                                <button class="btn btn-sm btn-outline-secondary">{{ usuario.active ? 'Deshabilitar' : 'Habilitar' }}</button>
+                                            </form>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_SUPER_ADMIN') and usuario.active and usuario != app.user %}
+                                            <a href="{{ path('app_homepage', {_switch_user: usuario.email}) }}" class="btn btn-sm btn-outline-secondary" title="Entrar como este usuario"><i class="bi bi-person-badge"></i></a>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="6" class="text-center text-secondary py-4">No hay usuarios{{ busqueda ? ' que coincidan con la búsqueda' }}.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">{{ knp_pagination_render(pagination) }}</div>
+        </div>
+    </div>
+{% endblock %}

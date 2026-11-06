@@ -1,0 +1,14 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}Revisá tu mail · Nido{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-2">Revisá tu mail</h1>
+            <p>Si el mail corresponde a un usuario, te llega un link para restablecer la contraseña. Vence en {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+            <p class="small text-secondary">Si no lo ves, fijate en la carpeta de spam o <a href="{{ path('app_forgot_password_request') }}">pedilo de nuevo</a>.</p>
+            <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100">Volver a ingresar</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}Nueva contraseña · Nido{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-3">Elegí tu nueva contraseña</h1>
+            {{ form_start(resetForm) }}
+                {{ form_row(resetForm.plainPassword) }}
+                <button class="btn btn-nido w-100" type="submit">Guardar contraseña</button>
+            {{ form_end(resetForm) }}
+        </div>
+    </div>
+{% endblock %}

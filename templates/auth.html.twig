@@ -1,0 +1,22 @@
+{# Pantallas sin sesión (login, restablecer contraseña). #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('login') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('login') }}
+{% endblock %}
+
+{% block layout %}
+    <main class="nido-auth">
+        <div class="nido-auth-marca mb-4">
+            <img src="{{ asset('images/nido.svg') }}" alt="">Nido
+        </div>
+        {% include 'util/_flashes.html.twig' %}
+        {% block body %}{% endblock %}
+    </main>
+{% endblock %}
